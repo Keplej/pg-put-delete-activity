@@ -7,6 +7,7 @@ $(document).ready(function(){
 function addClickHandlers() {
   $('#submitBtn').on('click', handleSubmit);
   $('#bookShelf').on('click', '.delete-book', deleteBookHandler);
+  $('#bookShelf').on('click', '.update-book', updateBookHandler);
   // TODO - Add code for edit & delete buttons
 }
 
@@ -17,7 +18,7 @@ function deleteBook(bookId) {
     url: `/books/${bookId}`
   })
     .then(function (response) {
-      renderBooks();
+      refreshBooks();
     })
     .catch(function (error) {
       alert('Error on delete book.', error);
@@ -28,6 +29,25 @@ function deleteBookHandler() {
   deleteBook($(this).data("id"))
 }
 
+function updateBook(bookId) {
+  $.ajax({
+    method:'PUT',
+    url: `/books/${bookId}`,
+    data: {
+      status: 'read'
+    }
+  })
+  .then(function (response) {
+    refreshBooks();
+  })
+  .catch(function (error) {
+    alert('Error on delete book.', error);
+  })
+}
+
+function updateBookHandler() {
+  uodateBook($(this).data("id"))
+}
 
 function handleSubmit() {
   console.log('Submit button clicked.');
@@ -80,6 +100,7 @@ function renderBooks(books) {
       </tr>
       <tr>
         <button class="delete-book" data-id="${book.id}">Delete</button>
+        <button class="update-book" data-id="${book.id}">Update</button>
       </tr>
     `);
   }
